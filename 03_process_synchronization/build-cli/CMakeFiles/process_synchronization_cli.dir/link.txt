@@ -1,0 +1,1 @@
+/usr/bin/c++  -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/process_synchronization_cli.dir/src/cli_main.cpp.o -o process_synchronization_cli  libprocess_synchronization_core.a
