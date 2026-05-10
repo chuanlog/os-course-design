@@ -1,0 +1,2 @@
+/usr/bin/ar qc libfile_system_core.a CMakeFiles/file_system_core.dir/src/filesystem/FsTypes.cpp.o CMakeFiles/file_system_core.dir/src/filesystem/FileSystemFacade.cpp.o CMakeFiles/file_system_core.dir/src/filesystem/VirtualFileSystem.cpp.o
+/usr/bin/ranlib libfile_system_core.a
