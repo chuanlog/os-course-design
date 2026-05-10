@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/bytedance/GitRepos/os-course-design/02_memory_management/build/_deps/fltk-subbuild/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

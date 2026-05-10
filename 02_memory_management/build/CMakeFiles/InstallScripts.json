@@ -1,0 +1,12 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/bytedance/GitRepos/os-course-design/02_memory_management/build/cmake_install.cmake",
+		"/Users/bytedance/GitRepos/os-course-design/02_memory_management/build/_deps/fltk-build/cmake_install.cmake",
+		"/Users/bytedance/GitRepos/os-course-design/02_memory_management/build/_deps/fltk-build/zlib/cmake_install.cmake",
+		"/Users/bytedance/GitRepos/os-course-design/02_memory_management/build/_deps/fltk-build/png/cmake_install.cmake",
+		"/Users/bytedance/GitRepos/os-course-design/02_memory_management/build/_deps/fltk-build/jpeg/cmake_install.cmake",
+		"/Users/bytedance/GitRepos/os-course-design/02_memory_management/build/_deps/fltk-build/src/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
