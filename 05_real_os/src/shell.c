@@ -62,6 +62,7 @@ static void execute_command(void) {
         terminal_writestring("  format     - Format the disk\n");
         terminal_writestring("  cat <file> - Read a file\n");
         terminal_writestring("  write <f> <c> - Write a file\n");
+        terminal_writestring("  exec <file>- Run a binary program\n");
     } 
     else if (strcmp(cmd_buf, "clear") == 0) {
         terminal_initialize();
@@ -95,7 +96,11 @@ static void execute_command(void) {
         } else {
             terminal_writestring("Usage: write <filename> <content>\n");
         }
-    } 
+    }
+    else if (strncmp(cmd_buf, "exec ", 5) == 0) {
+        extern void loader_exec(const char* filename);
+        loader_exec(cmd_buf + 5);
+    }
     else {
         terminal_writestring("Unknown command. Type 'help' for a list.\n");
     }

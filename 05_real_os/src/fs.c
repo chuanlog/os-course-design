@@ -1,6 +1,7 @@
 #include "fs.h"
+#include "fs.h"
 #include "ata.h"
-#include <stdint.h>
+#include "apps_meta.h"
 
 extern void terminal_writestring(const char* data);
 extern void terminal_putchar(char c);
@@ -101,6 +102,18 @@ void fs_format(void) {
     strcpy(sb.entries[0].name, "/");
     sb.entries[0].is_dir = 1;
     sb.entries[0].parent_idx = -1; /* 根目录没有父目录 */
+    sb.entry_count = 1;
+    
+    /* [Milestone 5]: 动态加载 apps 目录下的程序元数据 */
+    for (uint32_t i = 0; i < PREBUILT_APP_COUNT; i++) {
+        if (sb.entry_count >= MAX_ENTRIES) break;
+        uint32_t idx = sb.entry_count++;
+        strcpy(sb.entries[idx].name, prebuilt_apps[i].name);
+        sb.entries[idx].is_dir = 0;
+        sb.entries[idx].parent_idx = 0; /* 默认放在根目录下 */
+        sb.entries[idx].start_lba = prebuilt_apps[i].start_lba;
+        sb.entries[idx].size = prebuilt_apps[i].size;
+    }
     
     fs_sync_sb();
     current_dir_idx = 0;

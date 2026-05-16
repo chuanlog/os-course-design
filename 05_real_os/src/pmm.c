@@ -31,6 +31,12 @@ void pmm_init(uint32_t mem_upper_kb) {
     
     /* 总页数 */
     total_pages = total_memory / PMM_PAGE_SIZE;
+
+    /* [关键修复] 避免溢出：最大支持 128MB (32768 pages) */
+    if (total_pages > 32768) {
+        total_pages = 32768;
+    }
+
     free_pages = total_pages;
 
     /* 将位图放在内核映像结束的地方 */
@@ -48,7 +54,7 @@ void pmm_init(uint32_t mem_upper_kb) {
     }
 
     /* 
-     * 关键步骤：保留已经被内核和位图本身占用的内存页！
+     * [关键修复] 关键步骤：保留已经被内核和位图本身占用的内存页！
      * 内核起始于 1MB (0x100000)，我们需要计算出内核+位图一共占用了多少页
      */
     uint32_t kernel_and_bitmap_end = (uint32_t)&_kernel_end + bitmap_size_bytes;
@@ -65,20 +71,16 @@ void pmm_init(uint32_t mem_upper_kb) {
 }
 
 void* pmm_alloc_page(void) {
-    if (free_pages == 0) {
-        return NULL; /* 内存耗尽 (Out of Memory) */
-    }
-
-    /* 暴力遍历位图寻找第一个为 0 的 bit (首次适应算法) */
+    if (free_pages == 0) return (void*)0;
+    
     for (uint32_t i = 0; i < total_pages; i++) {
         if (!bitmap_test(i)) {
             bitmap_set(i);
             free_pages--;
-            return (void*)(i * PMM_PAGE_SIZE); /* 返回页面的物理基地址 */
+            return (void*)(i * PMM_PAGE_SIZE);
         }
     }
-    
-    return NULL;
+    return (void*)0; // Out of memory
 }
 
 void pmm_free_page(void* ptr) {
