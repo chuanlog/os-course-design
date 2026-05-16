@@ -10,13 +10,13 @@
 
 ## 目录概览
 
-| 目录 | 内容 | 运行方式 |
-| --- | --- | --- |
-| `01_process_scheduling` | 处理机调度模拟 | `make run` |
-| `02_memory_management` | 内存管理模拟 | `make run` |
-| `03_process_synchronization` | 进程同步与并发控制模拟 | `make run` |
-| `04_file_system` | 文件系统模拟 | `make run` |
-| `05_real_os` | 真实裸机操作系统 MiniOS | `make run` |
+| 目录                           | 内容              | 运行方式       |
+| ---------------------------- | --------------- | ---------- |
+| `01_process_scheduling`      | 处理机调度模拟         | `make run` |
+| `02_memory_management`       | 内存管理模拟          | `make run` |
+| `03_process_synchronization` | 进程同步与并发控制模拟     | `make run` |
+| `04_file_system`             | 文件系统模拟          | `make run` |
+| `05_real_os`                 | 真实裸机操作系统 MiniOS | `make run` |
 
 ## 环境要求
 
@@ -254,3 +254,4 @@ cmake --build build --config Release --target process_scheduling_gui
 - 每个目录下都有独立 README，可查看更详细的功能、结构和使用说明。
 - 基础四个模块主要用于演示操作系统课程中的核心算法和机制。
 - `05_real_os` 是拓展提升部分，用于演示可启动、可交互、可运行外部应用的真实裸机 OS。
+- 01～04个基础模块在win上可以用cmake很方便的构建，在mac/linux上可以之间使用makefile构建，`05_real_os` 依赖 `i686-elf-gcc` 交叉编译工具链，Windows 环境编译配置较复杂，及其不推荐在win上编译，编译最好在mac或者linux系统上进行。
