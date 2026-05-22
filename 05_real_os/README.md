@@ -89,7 +89,7 @@ brew install xorriso mtools qemu
 进入本目录：
 
 ```bash
-cd /Users/bytedance/GitRepos/os-course-design/05_real_os
+cd 05_real_os
 ```
 
 编译内核、打包 ISO、生成虚拟硬盘：
@@ -134,7 +134,7 @@ root@minios:/#
 如果要验证文件系统和外部应用，需要同时挂载虚拟硬盘。当前默认硬盘镜像是 raw 格式的 `disk.img`，可使用 `qemu-img` 转换为 VMDK 后再挂载：
 
 ```bash
-cd /Users/bytedance/GitRepos/os-course-design/05_real_os
+cd 05_real_os
 qemu-img convert -f raw -O vmdk disk.img disk.vmdk
 ```
 
@@ -190,7 +190,7 @@ boot
 
 ### 1. VGA 文本终端
 
-文件：[kernel.c](file:///Users/bytedance/GitRepos/os-course-design/05_real_os/src/kernel.c)
+文件：[kernel.c](05_real_os/src/kernel.c)
 
 终端直接写入 VGA 文本显存 `0xB8000`，每个字符占 2 字节：
 
@@ -214,10 +214,10 @@ boot
 
 相关文件：
 
-- [gdt.c](file:///Users/bytedance/GitRepos/os-course-design/05_real_os/src/gdt.c)
-- [idt.c](file:///Users/bytedance/GitRepos/os-course-design/05_real_os/src/idt.c)
-- [interrupt.S](file:///Users/bytedance/GitRepos/os-course-design/05_real_os/src/interrupt.S)
-- [keyboard.c](file:///Users/bytedance/GitRepos/os-course-design/05_real_os/src/keyboard.c)
+- [gdt.c](05_real_os/src/gdt.c)
+- [idt.c](05_real_os/src/idt.c)
+- [interrupt.S](05_real_os/src/interrupt.S)
+- [keyboard.c](05_real_os/src/keyboard.c)
 
 实现内容：
 
@@ -262,7 +262,7 @@ PMM 将物理内存按 `4KB` 页管理，使用位图记录每一页是否空闲
 
 ### 4. ATA PIO 硬盘驱动
 
-文件：[ata.c](file:///Users/bytedance/GitRepos/os-course-design/05_real_os/src/ata.c)
+文件：[ata.c](05_real_os/src/ata.c)
 
 当前使用主 IDE 通道的 ATA PIO 模式，通过端口 I/O 读写硬盘扇区。
 
@@ -283,7 +283,7 @@ PMM 将物理内存按 `4KB` 页管理，使用位图记录每一页是否空闲
 
 ### 5. MiniFS V2 文件系统
 
-文件：[fs.c](file:///Users/bytedance/GitRepos/os-course-design/05_real_os/src/fs.c)
+文件：[fs.c](05_real_os/src/fs.c)
 
 `MiniFS V2` 是一个简化的层次文件系统，元数据保存在虚拟硬盘的前几个扇区。
 
@@ -321,7 +321,7 @@ LBA 5+      文件数据区 / 外部应用程序数据区
 
 ### 6. Shell 命令
 
-文件：[shell.c](file:///Users/bytedance/GitRepos/os-course-design/05_real_os/src/shell.c)
+文件：[shell.c](05_real_os/src/shell.c)
 
 支持命令：
 
@@ -427,7 +427,7 @@ _start:
 
 ### C 语言应用规则
 
-示例：[calc.c](file:///Users/bytedance/GitRepos/os-course-design/05_real_os/apps/calc.c)
+示例：[calc.c](05_real_os/apps/calc.c)
 
 C 应用不要自己写 `_start`，而是实现 `app_main`：
 
@@ -455,7 +455,7 @@ void app_main(print_t print, getchar_t getchar) {
 1. 在 `apps/` 下新建文件：
 
 ```bash
-cd /Users/bytedance/GitRepos/os-course-design/05_real_os
+cd 05_real_os
 touch apps/demo.c
 ```
 

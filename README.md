@@ -83,7 +83,7 @@ brew install xorriso mtools qemu
 运行：
 
 ```bash
-cd /Users/bytedance/GitRepos/os-course-design/01_process_scheduling
+cd 01_process_scheduling
 make run
 ```
 
@@ -110,7 +110,7 @@ make run-cli
 运行：
 
 ```bash
-cd /Users/bytedance/GitRepos/os-course-design/02_memory_management
+cd 02_memory_management
 make run
 ```
 
@@ -137,7 +137,7 @@ make run-cli
 运行：
 
 ```bash
-cd /Users/bytedance/GitRepos/os-course-design/03_process_synchronization
+cd 03_process_synchronization
 make run
 ```
 
@@ -166,7 +166,7 @@ make run-cli
 运行：
 
 ```bash
-cd /Users/bytedance/GitRepos/os-course-design/04_file_system
+cd 04_file_system
 make run
 ```
 
@@ -201,7 +201,7 @@ make run-cli
 运行：
 
 ```bash
-cd /Users/bytedance/GitRepos/os-course-design/05_real_os
+cd 05_real_os
 make run
 ```
 

@@ -80,10 +80,10 @@ sudo dnf install gcc-c++ cmake git libX11-devel libXext-devel libXft-devel libXi
 
 ## 一键编译运行
 
-目录下已经提供了 [Makefile](file:///Users/bytedance/GitRepos/os-course-design/03_process_synchronization/Makefile)，推荐直接使用：
+目录下已经提供了 [Makefile](03_process_synchronization/Makefile)，推荐直接使用：
 
 ```bash
-cd /Users/bytedance/GitRepos/os-course-design/03_process_synchronization
+cd 03_process_synchronization
 make run
 ```
 
@@ -102,7 +102,7 @@ make distclean   # 删除所有构建目录
 ## 编译运行 GUI
 
 ```bash
-cd /Users/bytedance/GitRepos/os-course-design/03_process_synchronization
+cd 03_process_synchronization
 cmake -S . -B build -DBUILD_PROCESS_SYNCHRONIZATION_GUI=ON -DBUILD_PROCESS_SYNCHRONIZATION_CLI=ON
 cmake --build build --target process_synchronization_gui -j
 ./build/process_synchronization_gui
@@ -111,7 +111,7 @@ cmake --build build --target process_synchronization_gui -j
 ## 编译运行 CLI
 
 ```bash
-cd /Users/bytedance/GitRepos/os-course-design/03_process_synchronization
+cd 03_process_synchronization
 cmake -S . -B build-cli -DBUILD_PROCESS_SYNCHRONIZATION_GUI=OFF -DBUILD_PROCESS_SYNCHRONIZATION_CLI=ON
 cmake --build build-cli --target process_synchronization_cli -j
 ./build-cli/process_synchronization_cli

@@ -87,10 +87,10 @@ sudo dnf install gcc-c++ cmake git libX11-devel libXext-devel libXft-devel libXi
 
 ## 一键编译运行
 
-目录下已经提供了 [Makefile](file:///Users/bytedance/GitRepos/os-course-design/02_memory_management/Makefile)，推荐直接使用：
+目录下已经提供了 [Makefile](02_memory_management/Makefile)，推荐直接使用：
 
 ```bash
-cd /Users/bytedance/GitRepos/os-course-design/02_memory_management
+cd 02_memory_management
 make run
 ```
 
@@ -109,7 +109,7 @@ make distclean   # 删除所有构建目录
 ## 编译运行 GUI
 
 ```bash
-cd /Users/bytedance/GitRepos/os-course-design/02_memory_management
+cd 02_memory_management
 cmake -S . -B build -DBUILD_MEMORY_MANAGEMENT_GUI=ON -DBUILD_MEMORY_MANAGEMENT_CLI=ON
 cmake --build build --target memory_management_gui -j
 ./build/memory_management_gui
@@ -118,7 +118,7 @@ cmake --build build --target memory_management_gui -j
 ## 编译运行 CLI
 
 ```bash
-cd /Users/bytedance/GitRepos/os-course-design/02_memory_management
+cd 02_memory_management
 cmake -S . -B build-cli -DBUILD_MEMORY_MANAGEMENT_GUI=OFF -DBUILD_MEMORY_MANAGEMENT_CLI=ON
 cmake --build build-cli --target memory_management_cli -j
 ./build-cli/memory_management_cli

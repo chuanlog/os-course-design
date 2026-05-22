@@ -97,10 +97,10 @@ sudo dnf install gcc-c++ cmake git libX11-devel libXext-devel libXft-devel libXi
 
 ## 一键编译运行
 
-目录下已经提供了 [Makefile](file:///Users/bytedance/GitRepos/os-course-design/04_file_system/Makefile)，推荐直接使用：
+目录下已经提供了 [Makefile](04_file_system/Makefile)，推荐直接使用：
 
 ```bash
-cd /Users/bytedance/GitRepos/os-course-design/04_file_system
+cd 04_file_system
 make run
 ```
 
@@ -119,7 +119,7 @@ make distclean   # 删除所有构建目录
 ## 编译运行 GUI
 
 ```bash
-cd /Users/bytedance/GitRepos/os-course-design/04_file_system
+cd 04_file_system
 cmake -S . -B build -DBUILD_FILE_SYSTEM_GUI=ON -DBUILD_FILE_SYSTEM_CLI=ON
 cmake --build build --target file_system_gui -j
 ./build/file_system_gui
@@ -128,7 +128,7 @@ cmake --build build --target file_system_gui -j
 ## 编译运行 CLI
 
 ```bash
-cd /Users/bytedance/GitRepos/os-course-design/04_file_system
+cd 04_file_system
 cmake -S . -B build-cli -DBUILD_FILE_SYSTEM_GUI=OFF -DBUILD_FILE_SYSTEM_CLI=ON
 cmake --build build-cli --target file_system_cli -j
 ./build-cli/file_system_cli

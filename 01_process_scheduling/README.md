@@ -121,10 +121,10 @@ sudo dnf install gcc-c++ cmake git libX11-devel libXext-devel libXft-devel libXi
 
 ## 一键编译运行
 
-目录下已经提供了 [Makefile](file:///Users/bytedance/GitRepos/os-course-design/01_process_scheduling/Makefile)，推荐直接使用：
+目录下已经提供了 [Makefile](01_process_scheduling/Makefile)，推荐直接使用：
 
 ```bash
-cd /Users/bytedance/GitRepos/os-course-design/01_process_scheduling
+cd 01_process_scheduling
 make run
 ```
 
@@ -143,7 +143,7 @@ make distclean   # 删除所有构建目录
 ## 编译运行 GUI
 
 ```bash
-cd /Users/bytedance/GitRepos/os-course-design/01_process_scheduling
+cd 01_process_scheduling
 cmake -S . -B build -DBUILD_PROCESS_SCHEDULING_GUI=ON -DBUILD_PROCESS_SCHEDULING_CLI=ON
 cmake --build build --target process_scheduling_gui -j
 ./build/process_scheduling_gui
@@ -152,7 +152,7 @@ cmake --build build --target process_scheduling_gui -j
 ## 编译运行 CLI
 
 ```bash
-cd /Users/bytedance/GitRepos/os-course-design/01_process_scheduling
+cd 01_process_scheduling
 cmake -S . -B build-cli -DBUILD_PROCESS_SCHEDULING_GUI=OFF -DBUILD_PROCESS_SCHEDULING_CLI=ON
 cmake --build build-cli --target process_scheduling_cli -j
 ./build-cli/process_scheduling_cli
