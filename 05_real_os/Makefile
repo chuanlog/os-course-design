@@ -1,6 +1,8 @@
 # 编译器设置：由于我们要编译纯净的无操作系统的 x86 目标文件，必须使用交叉编译器
-CC = i686-elf-gcc
-AS = i686-elf-as
+CC ?= i686-elf-gcc
+LD ?= i686-elf-ld
+GRUB_MKRESCUE ?= i686-elf-grub-mkrescue
+QEMU ?= qemu-system-i386
 
 # CFLAGS:
 # -std=gnu99: 使用 GNU C99 标准
@@ -18,6 +20,7 @@ LDFLAGS = -ffreestanding -O2 -nostdlib -lgcc
 SRC_DIR = src
 BUILD_DIR = build
 ISODIR = isodir
+GRUB_CFG = grub.cfg
 
 # 目标文件
 OBJS = $(BUILD_DIR)/boot.o $(BUILD_DIR)/gdt.o $(BUILD_DIR)/interrupt.o $(BUILD_DIR)/idt.o $(BUILD_DIR)/keyboard.o $(BUILD_DIR)/pmm.o $(BUILD_DIR)/ata.o $(BUILD_DIR)/fs.o $(BUILD_DIR)/shell.o $(BUILD_DIR)/loader.o $(BUILD_DIR)/kernel.o
@@ -28,8 +31,15 @@ APP_ASM_SRCS := $(filter-out apps/app_crt0.S,$(wildcard apps/*.S))
 APP_C_SRCS := $(wildcard apps/*.c)
 APP_BINS := $(patsubst apps/%.S, %.bin, $(APP_ASM_SRCS)) $(patsubst apps/%.c, %.bin, $(APP_C_SRCS))
 
+.PHONY: all check-tools clean run
+
 # 默认目标：编译出 ISO 镜像
-all: minios.iso disk.img
+all: check-tools minios.iso disk.img
+
+check-tools:
+	@command -v $(CC) >/dev/null 2>&1 || { echo "错误: 未找到 $(CC)，请先安装 i686-elf-gcc 交叉编译工具链。"; exit 1; }
+	@command -v $(LD) >/dev/null 2>&1 || { echo "错误: 未找到 $(LD)，请先安装 i686-elf-binutils。"; exit 1; }
+	@command -v $(GRUB_MKRESCUE) >/dev/null 2>&1 || { echo "错误: 未找到 $(GRUB_MKRESCUE)，请先安装 i686-elf-grub。"; exit 1; }
 
 # 编译前自动生成应用元数据头文件
 $(BUILD_DIR)/fs.o: $(SRC_DIR)/fs.c $(SRC_DIR)/apps_meta.h
@@ -67,11 +77,12 @@ minios.bin: $(OBJS) linker.ld
 	$(CC) -T linker.ld -o $@ $(LDFLAGS) $(OBJS)
 
 # 将内核打包成可启动的 ISO 镜像
-minios.iso: minios.bin
+minios.iso: minios.bin $(GRUB_CFG)
 	@mkdir -p $(ISODIR)/boot/grub
 	cp minios.bin $(ISODIR)/boot/minios.bin
+	cp $(GRUB_CFG) $(ISODIR)/boot/grub/grub.cfg
 	# i686-elf-grub-mkrescue 会根据 isodir 目录的结构和 grub.cfg 自动生成支持光盘引导的 ISO 文件
-	i686-elf-grub-mkrescue -o minios.iso $(ISODIR)
+	$(GRUB_MKRESCUE) -o minios.iso $(ISODIR)
 
 # 创建虚拟硬盘并动态注入所有编译好的 APP
 disk.img: $(APP_BINS)
@@ -87,20 +98,21 @@ disk.img: $(APP_BINS)
 # 自动编译外部测试程序 (纯二进制，针对汇编)
 %.bin: apps/%.S
 	@mkdir -p $(BUILD_DIR)
-	i686-elf-gcc -m32 -c $< -o $(BUILD_DIR)/$*.o
-	i686-elf-ld -m elf_i386 -Ttext 0x1000000 --oformat binary -o $@ $(BUILD_DIR)/$*.o
+	$(CC) -m32 -c $< -o $(BUILD_DIR)/$*.o
+	$(LD) -m elf_i386 -Ttext 0x1000000 --oformat binary -o $@ $(BUILD_DIR)/$*.o
 
 # 自动编译外部测试程序 (纯二进制，针对 C 语言)
 %.bin: apps/%.c
 	@mkdir -p $(BUILD_DIR)
-	i686-elf-gcc -m32 -c apps/app_crt0.S -o $(BUILD_DIR)/app_crt0.o
-	i686-elf-gcc -m32 -c $< -o $(BUILD_DIR)/$*.o $(CFLAGS) -fno-pie -fno-pic -fno-stack-protector -fno-builtin -mno-sse -mno-mmx -mno-sse2
-	i686-elf-ld -m elf_i386 -Ttext 0x1000000 --oformat binary -e _start -o $@ $(BUILD_DIR)/app_crt0.o $(BUILD_DIR)/$*.o
+	$(CC) -m32 -c apps/app_crt0.S -o $(BUILD_DIR)/app_crt0.o
+	$(CC) -m32 -c $< -o $(BUILD_DIR)/$*.o $(CFLAGS) -fno-pie -fno-pic -fno-stack-protector -fno-builtin -mno-sse -mno-mmx -mno-sse2
+	$(LD) -m elf_i386 -Ttext 0x1000000 --oformat binary -e _start -o $@ $(BUILD_DIR)/app_crt0.o $(BUILD_DIR)/$*.o
 
 # 清理编译产物
 clean:
 	rm -rf $(BUILD_DIR) minios.bin minios.iso disk.img *.bin $(SRC_DIR)/apps_meta.h $(ISODIR)/boot/minios.bin
 
 # 在 QEMU 虚拟机中运行 ISO 进行测试 (缩放显示)，并挂载硬盘
-run: minios.iso disk.img
-	qemu-system-i386 -cdrom minios.iso -drive file=disk.img,format=raw,index=0,media=disk -display cocoa,zoom-to-fit=on
+run: check-tools minios.iso disk.img
+	@command -v $(QEMU) >/dev/null 2>&1 || { echo "错误: 未找到 $(QEMU)，请先安装 QEMU。"; exit 1; }
+	$(QEMU) -cdrom minios.iso -drive file=disk.img,format=raw,index=0,media=disk -display cocoa,zoom-to-fit=on

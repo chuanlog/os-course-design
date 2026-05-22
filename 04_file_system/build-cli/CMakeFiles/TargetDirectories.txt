@@ -1,4 +1,0 @@
-/Users/bytedance/GitRepos/os-course-design/04_file_system/build-cli/CMakeFiles/file_system_core.dir
-/Users/bytedance/GitRepos/os-course-design/04_file_system/build-cli/CMakeFiles/file_system_cli.dir
-/Users/bytedance/GitRepos/os-course-design/04_file_system/build-cli/CMakeFiles/edit_cache.dir
-/Users/bytedance/GitRepos/os-course-design/04_file_system/build-cli/CMakeFiles/rebuild_cache.dir

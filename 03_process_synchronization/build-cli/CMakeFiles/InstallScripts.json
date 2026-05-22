@@ -1,7 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"/Users/bytedance/GitRepos/os-course-design/03_process_synchronization/build-cli/cmake_install.cmake"
-	],
-	"Parallel" : false
-}

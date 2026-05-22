@@ -1,4 +1,0 @@
-/Users/bytedance/GitRepos/os-course-design/03_process_synchronization/build-cli/CMakeFiles/process_synchronization_core.dir
-/Users/bytedance/GitRepos/os-course-design/03_process_synchronization/build-cli/CMakeFiles/process_synchronization_cli.dir
-/Users/bytedance/GitRepos/os-course-design/03_process_synchronization/build-cli/CMakeFiles/edit_cache.dir
-/Users/bytedance/GitRepos/os-course-design/03_process_synchronization/build-cli/CMakeFiles/rebuild_cache.dir

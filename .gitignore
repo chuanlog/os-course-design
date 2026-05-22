@@ -1,0 +1,39 @@
+# CMake build directories
+build/
+build-cli/
+cmake-build-*/
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+compile_commands.json
+
+# Fetched or generated dependencies
+_deps/
+
+# Native build artifacts
+*.o
+*.o.d
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.exe
+
+# MiniOS generated artifacts
+05_real_os/build/
+05_real_os/isodir/
+05_real_os/minios.bin
+05_real_os/minios.iso
+05_real_os/disk.img
+05_real_os/disk.vmdk
+05_real_os/*.bin
+05_real_os/src/apps_meta.h
+
+# Editor and OS metadata
+.DS_Store
+.vscode/
+.idea/

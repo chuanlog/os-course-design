@@ -1,2 +1,0 @@
-/usr/bin/ar qc libprocess_synchronization_core.a CMakeFiles/process_synchronization_core.dir/src/sync/SyncTypes.cpp.o CMakeFiles/process_synchronization_core.dir/src/sync/ProducerConsumerSimulator.cpp.o CMakeFiles/process_synchronization_core.dir/src/sync/ReadersWritersSimulator.cpp.o CMakeFiles/process_synchronization_core.dir/src/sync/DiningPhilosophersSimulator.cpp.o CMakeFiles/process_synchronization_core.dir/src/sync/SimulationFacade.cpp.o
-/usr/bin/ranlib libprocess_synchronization_core.a

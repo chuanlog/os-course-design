@@ -1,2 +1,0 @@
-/usr/bin/ar qc libmemory_management_core.a CMakeFiles/memory_management_core.dir/src/memory/PartitionManager.cpp.o CMakeFiles/memory_management_core.dir/src/memory/PageReplacement.cpp.o CMakeFiles/memory_management_core.dir/src/memory/MemoryFacade.cpp.o
-/usr/bin/ranlib libmemory_management_core.a

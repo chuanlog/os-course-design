@@ -1,7 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"/Users/bytedance/GitRepos/os-course-design/04_file_system/build/_deps/fltk-subbuild/cmake_install.cmake"
-	],
-	"Parallel" : false
-}
