@@ -241,7 +241,7 @@ boot
 
 ### 3. 物理内存管理器 PMM
 
-文件：[pmm.c](file:///Users/bytedance/GitRepos/os-course-design/05_real_os/src/pmm.c)
+文件：`pmm.c`
 
 PMM 将物理内存按 `4KB` 页管理，使用位图记录每一页是否空闲。
 
@@ -354,7 +354,7 @@ cd /
 
 ### 7. 外部程序加载器
 
-文件：[loader.c](file:///Users/bytedance/GitRepos/os-course-design/05_real_os/src/loader.c)
+文件：`load.c`
 
 外部程序加载流程：
 
@@ -407,8 +407,7 @@ call 0x1000000
 
 ### 汇编应用规则
 
-示例：[hello.S](file:///Users/bytedance/GitRepos/os-course-design/05_real_os/apps/hello.S)
-
+示例：`hello.S`
 汇编应用需要：
 
 - 提供 `_start` 符号
@@ -490,9 +489,8 @@ exec demo.bin
 
 ## 交互式计算器
 
-文件：[calc.c](file:///Users/bytedance/GitRepos/os-course-design/05_real_os/apps/calc.c)
-
-计算器是一个外部 C 应用，运行方式：
+计算器是一个内置的系统应用，是这个操作系统上跑程序的一个例子
+运行方式：
 
 ```text
 exec calc.bin
@@ -531,7 +529,7 @@ Result: 12 + 30 = 42
 - 主键盘 `*`：使用 `Shift+8`
 - 小键盘 `+`、`*` 也可用
 
-## 构建系统原理
+## 构建系统过程
 
 `Makefile` 主要目标：
 
@@ -566,162 +564,3 @@ dd 写入 disk.img 的连续 LBA
     ↓
 MiniFS 自动注册应用文件
 ```
-
-## 底层原理总结
-
-### 为什么要用 GRUB
-
-直接手写 16 位引导扇区需要处理 BIOS、磁盘读取、A20、保护模式切换等细节。这里使用 GRUB 的 Multiboot 规范，让课程设计重点放在内核、驱动、文件系统和应用加载器上。
-
-### 为什么应用要编译成 flat binary
-
-MiniOS 当前还没有实现 ELF 加载器。普通 ELF 文件包含文件头、段表、符号、重定位等信息，不能直接跳转执行。
-
-因此外部应用使用：
-
-```bash
-i686-elf-ld --oformat binary
-```
-
-生成纯机器码文件，内核只需把它读入内存并 `call` 即可运行。
-
-### 为什么 C 应用需要 `app_crt0.S`
-
-`ld -e _start` 只能设置 ELF 入口地址，但 `--oformat binary` 不保证 `_start` 位于文件第 0 字节。
-
-如果 C 编译器把辅助函数排在前面，内核跳到 flat binary 开头时就会执行错误函数，导致卡死。
-
-因此：
-
-- `app_crt0.S` 被链接到 C 应用最前面
-- 它提供真正位于文件偏移 0 的 `_start`
-- 它调用 C 层的 `app_main`
-
-### 为什么 Shell 执行应用时要特别处理中断
-
-`exec calc.bin` 是通过键盘回车触发的。如果在键盘中断处理过程中直接运行长时间应用，而 PIC 还没收到 EOI，后续键盘中断无法正常投递。
-
-因此 `keyboard.c` 中采用：
-
-1. 先读取扫描码
-2. 先向 PIC 发送 EOI
-3. 再把字符交给 Shell 或应用
-4. 对可能长时间运行的 Shell 命令临时打开中断
-
-这样计算器运行时才能继续接收键盘输入。
-
-### 为什么 `disk.img` 要和 `minios.iso` 一起使用
-
-`minios.iso` 只负责启动内核。外部应用和 MiniFS 数据存储在 `disk.img` 中。
-
-QEMU 命令中：
-
-```bash
--cdrom minios.iso
--drive file=disk.img,format=raw,index=0,media=disk
-```
-
-前者模拟光盘启动，后者模拟硬盘持久化存储。
-
-## 常见问题
-
-### 1. `exec calc.bin` 后没有应用
-
-先执行：
-
-```text
-ls
-```
-
-确认当前目录下存在 `calc.bin`。如果不存在，可能是磁盘镜像仍是旧格式，执行：
-
-```text
-format
-ls
-```
-
-### 2. 按 `+` 或 `*` 没反应
-
-主键盘上：
-
-- `+` 需要按 `Shift+=`
-- `*` 需要按 `Shift+8`
-
-当前键盘驱动已经支持左右 Shift。
-
-### 3. 屏幕到底部后覆盖旧内容
-
-当前终端已经实现滚动。如果出现覆盖，先确认运行的是最新编译结果：
-
-```bash
-make clean
-make run
-```
-
-### 4. 修改 `apps/` 后没有出现在 `ls`
-
-需要重新生成磁盘镜像：
-
-```bash
-make clean
-make run
-```
-
-构建时会重新扫描应用、生成 `apps_meta.h` 并写入 `disk.img`。
-
-## 当前限制
-
-- 当前是单任务内核，没有进程隔离和用户态 Ring 3。
-- 外部应用运行在内核态，理论上可以直接访问硬件和内核内存。
-- 文件系统使用固定目录项表，容量有限。
-- ATA 驱动使用 PIO 模式，没有 DMA。
-- 当前没有 ELF 加载器，应用必须是 flat binary。
-- 当前没有分页机制和虚拟内存。
-- `getchar` 是阻塞式输入。
-- 计算器只支持非负整数输入，除法为整数除法。
-
-## 课程设计亮点
-
-- 从模拟器扩展到真实可启动操作系统。
-- 能生成标准 `ISO`，并在虚拟机中启动。
-- 自行实现 GDT、IDT、PIC、键盘中断、VGA 终端和硬盘 PIO。
-- 实现了简单但完整的物理内存管理器。
-- 实现了可持久化的层次文件系统。
-- 实现了 Shell 和类 Linux 文件命令。
-- 实现了外部应用加载器，并支持自动扫描、自动编译、自动注册应用。
-- C 应用通过内核 API 进行输入输出，具备系统调用雏形。
-- 交互式计算器展示了应用层与内核层协作。
-
-## 推荐演示流程
-
-```text
-help
-ls
-pwd
-mkdir home
-cd home
-write note.txt hello_minios
-ls
-cat note.txt
-cd /
-exec hello.bin
-exec calc.bin
-```
-
-计算器演示：
-
-```text
-12
-+
-30
-```
-
-或：
-
-```text
-6
-*
-7
-```
-
-其中 `+` 使用 `Shift+=` 输入，`*` 使用 `Shift+8` 输入。
