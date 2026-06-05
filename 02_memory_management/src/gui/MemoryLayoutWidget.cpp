@@ -57,8 +57,9 @@ void MemoryLayoutWidget::draw() {
 
     const int leftMargin = 20;
     const int rightMargin = 20;
-    const int topMargin = 36;
-    const int blockHeight = 58;
+    const int topMargin = 38;
+    const int bottomLabelSpace = 34;
+    const int blockHeight = std::max(36, h() - topMargin - bottomLabelSpace);
     const int usableWidth = std::max(1, w() - leftMargin - rightMargin);
 
     fl_font(FL_HELVETICA, 12);
@@ -81,10 +82,10 @@ void MemoryLayoutWidget::draw() {
 
         const std::string label = block.name + "(" + std::to_string(block.size) + ")";
         fl_draw(label.c_str(), startX + 6, blockY + 22);
-        fl_draw(std::to_string(block.start).c_str(), startX, blockY + blockHeight + 18);
+        fl_draw(std::to_string(block.start).c_str(), startX, blockY + blockHeight + 22);
     }
 
     const std::string endText = std::to_string(totalSize_);
-    fl_draw(endText.c_str(), x() + leftMargin + usableWidth - 10, y() + topMargin + blockHeight + 18);
+    fl_draw(endText.c_str(), x() + leftMargin + usableWidth - 10, y() + topMargin + blockHeight + 22);
     fl_pop_clip();
 }

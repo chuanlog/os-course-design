@@ -150,17 +150,17 @@ void MainWindow::buildUi() {
     startPlaybackButton->callback(&MainWindow::onStartPartitionPlayback, this);
     stopPlaybackButton->callback(&MainWindow::onStopPartitionPlayback, this);
 
-    memoryLayoutWidget_ = new MemoryLayoutWidget(20, 255, 1240, 120);
+    memoryLayoutWidget_ = new MemoryLayoutWidget(20, 255, 1240, 145);
 
-    auto* allocatedHeader = new Fl_Box(20, 385, 220, 22, "已分配分区");
+    auto* allocatedHeader = new Fl_Box(20, 410, 220, 22, "已分配分区");
     allocatedHeader->labelfont(FL_HELVETICA_BOLD);
     allocatedHeader->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
-    allocatedTable_ = new BlocksTable(20, 410, 600, 215);
+    allocatedTable_ = new BlocksTable(20, 435, 600, 190);
 
-    auto* freeHeader = new Fl_Box(660, 385, 220, 22, "空闲分区");
+    auto* freeHeader = new Fl_Box(660, 410, 220, 22, "空闲分区");
     freeHeader->labelfont(FL_HELVETICA_BOLD);
     freeHeader->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
-    freeTable_ = new BlocksTable(660, 410, 600, 215);
+    freeTable_ = new BlocksTable(660, 435, 600, 190);
 
     partitionGroup_->end();
 
