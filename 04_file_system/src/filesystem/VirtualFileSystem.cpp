@@ -45,6 +45,25 @@ bool readPrimitive(std::istream& in, T* value) {
     return static_cast<bool>(in);
 }
 
+FsEntry withDirectoryUsage(const FsEntry& entry, const std::vector<FsEntry>& entries) {
+    if (entry.type == EntryType::File) {
+        return entry;
+    }
+
+    FsEntry result = entry;
+    result.size = 0;
+    result.blocks.clear();
+    for (const auto& child : entries) {
+        if (child.parentId != entry.id) {
+            continue;
+        }
+        const FsEntry childUsage = withDirectoryUsage(child, entries);
+        result.size += childUsage.size;
+        result.blocks.insert(result.blocks.end(), childUsage.blocks.begin(), childUsage.blocks.end());
+    }
+    return result;
+}
+
 }  // namespace
 
 void VirtualFileSystem::reset() {
@@ -92,7 +111,7 @@ std::vector<FsEntry> VirtualFileSystem::listDirectory(int parentId) const {
     std::vector<FsEntry> children;
     for (const auto& entry : entries_) {
         if (entry.parentId == parentId) {
-            children.push_back(entry);
+            children.push_back(withDirectoryUsage(entry, entries_));
         }
     }
     std::sort(children.begin(), children.end(), [](const FsEntry& lhs, const FsEntry& rhs) {

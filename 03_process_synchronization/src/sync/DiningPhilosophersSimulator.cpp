@@ -1,4 +1,4 @@
-#include "DiningPhilosophersSimulator.h"
+X#include "DiningPhilosophersSimulator.h"
 
 #include "EventRecorder.h"
 

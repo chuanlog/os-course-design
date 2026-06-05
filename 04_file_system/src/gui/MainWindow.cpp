@@ -335,10 +335,12 @@ void MainWindow::selectEntry(int entryId) {
         return;
     }
     selectedEntryId_ = entryId;
+    simplefs::FsEntry displayEntry = *entry;
     if (fileListTable_ != nullptr) {
         fileListTable_->select_all_rows(0);
         for (int row = 0; row < static_cast<int>(visibleEntries_.size()); ++row) {
             if (visibleEntries_[static_cast<std::size_t>(row)].id == entryId) {
+                displayEntry = visibleEntries_[static_cast<std::size_t>(row)];
                 fileListTable_->select_row(row, 1);
                 break;
             }
@@ -350,8 +352,8 @@ void MainWindow::selectEntry(int entryId) {
     info << "当前选择: " << entry->name
          << " | 类型: " << simplefs::entryTypeName(entry->type)
          << " | 路径: " << fileSystem_.fullPath(entry->id)
-         << " | 大小: " << entry->size
-         << " | 占用块: " << entry->blocks.size();
+         << " | 大小: " << displayEntry.size
+         << " | 占用块: " << displayEntry.blocks.size();
     selectedInfoBox_->copy_label(info.str().c_str());
 
     if (entry->type == simplefs::EntryType::File) {
