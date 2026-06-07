@@ -1,6 +1,13 @@
-# 编译器设置：由于我们要编译纯净的无操作系统的 x86 目标文件，必须使用交叉编译器
-CC ?= i686-elf-gcc
-LD ?= i686-elf-ld
+# 编译器设置：由于我们要编译纯净的无操作系统的 x86 目标文件，必须使用交叉编译器。
+# GNU Make 内置默认 CC=cc / LD=ld；若未显式覆盖，则替换为 i686 交叉工具链。
+ifeq ($(origin CC), default)
+CC := i686-elf-gcc
+endif
+
+ifeq ($(origin LD), default)
+LD := i686-elf-ld
+endif
+
 GRUB_MKRESCUE ?= i686-elf-grub-mkrescue
 QEMU ?= qemu-system-i386
 
